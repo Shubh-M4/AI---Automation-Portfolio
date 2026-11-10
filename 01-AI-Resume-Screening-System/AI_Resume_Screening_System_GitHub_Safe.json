@@ -1,0 +1,1183 @@
+{
+  "name": "AI Resume  Screening & Interview Shortlisting System",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": " Data Analyst - Job Application Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1178193299,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit#gid=1178193299"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b42be7dd-df28-42f8-9dca-aa5425facd34",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": null,
+          "name": "RECONNECT_AFTER_IMPORT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "02787542-1569-4720-ad3f-a01fc096c218",
+              "leftValue": "={{ $json[\"Candidate Name\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "3ade1489-f011-4a1a-b9d0-5642e2820dd5",
+              "leftValue": "={{ $json[\"Email Address\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "c548d219-4060-468e-9dbb-7e25f0ddf410",
+              "leftValue": "={{ $json[\"Phone Number\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "3ae08083-8a4e-47e7-be70-1ec78fd57ca6",
+              "leftValue": "={{ $json[\"Education Qualification\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "b4664211-449b-4086-a604-3783fa4a1e85",
+              "leftValue": "={{ $json[\"Years of Experience\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "5418c236-8b41-4636-bac4-cd4b7d64da2e",
+              "leftValue": "={{ $json[\"Technical Skills\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a5695b8b-9285-4665-b657-18410f973e3a",
+              "leftValue": "={{ $json[\"SQL Experience\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f2b1a71d-a6d7-406a-ac3e-30533ea6cbfa",
+              "leftValue": "={{ $json[\"Python Experience\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f8bff90e-2317-472e-9c80-e4439f687aa9",
+              "leftValue": "={{ $json[\"BI Tools (Power BI/Tableau)\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "7d08d235-1547-498d-ada9-a54d68bff1e6",
+              "leftValue": "={{ $json[\"Resume Upload (PDF)\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1168,
+        16
+      ],
+      "id": "11b10bab-df0f-4da2-87f2-67e832452d8d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json[\"Resume Upload (PDF)\"].match(/id=([^&]+)/)[1] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1360,
+        -192
+      ],
+      "id": "b5c4f614-0697-41a9-a50b-987bea407f5d",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": null,
+          "name": "RECONNECT_AFTER_IMPORT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        1552,
+        -192
+      ],
+      "id": "f0c5289c-25bf-4f9c-9b39-ec1a3ec31ba6",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1712,
+        -64
+      ],
+      "id": "8873c421-ba47-4d0f-b7f7-628bd2e3a11e",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert HR recruiter specializing in Data Analyst hiring.\n\nYour task is to evaluate candidates for a Data Analyst position requiring 2–5 years of experience.\n\nCANDIDATE INFORMATION:\n\nCandidate Name:\n{{ $json[\"Candidate Name\"] }}\n\nEmail:\n{{ $json[\"Email Address\"] }}\n\nEducation:\n{{ $json[\"Education Qualification\"] }}\n\nYears of Experience:\n{{ $json[\"Years of Experience\"] }}\n\nTechnical Skills:\n{{ $json[\"Technical Skills\"] }}\n\nSQL Experience:\n{{ $json[\"SQL Experience\"] }}\n\nPython Experience:\n{{ $json[\"Python Experience\"] }}\n\nBI Tools:\n{{ $json[\"BI Tools (Power BI/Tableau)\"] }}\n\nRESUME TEXT:\n{{ $json[\"text\"] }}\n\nYOUR TASK:\n\n1. Analyze the candidate's resume and form information.\n2. Evaluate SQL, Python, data analysis and BI tool skills.\n3. Check whether the candidate meets the 2–5 years experience requirement.\n4. Identify strengths and missing skills.\n5. Compare the candidate's skills with Data Analyst job requirements.\n6. Calculate an overall suitability score from 0 to 100.\n7. Give a recommendation based on job-related evidence.\n\nSCORING CRITERIA:\n\n- SQL skills: 25 points\n- Python skills: 20 points\n- BI tools: 20 points\n- Relevant experience: 20 points\n- Data analysis and problem-solving: 15 points\n\nOUTPUT FORMAT:\n\nReturn the result in JSON format:\n\n{\n  \"candidate_name\": \"\",\n  \"overall_score\": 0,\n  \"experience_match\": \"\",\n  \"skills_match\": \"\",\n  \"strengths\": [],\n  \"missing_skills\": [],\n  \"recommendation\": \"\",\n  \"reason\": \"\"\n}\n\nIMPORTANT RULES:\n\n- Do not invent candidate information.\n- Use only information provided in the form and resume.\n- If information is missing, mention it.\n- Do not judge candidates based on age, gender, religion or other protected characteristics.\n- Give an evidence-based recommendation.\n- Do not automatically reject a candidate only because of one missing skill.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1936,
+        -64
+      ],
+      "id": "7cc632ea-2cce-4816-87ad-982e58b1a217",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        1808,
+        144
+      ],
+      "id": "594c5b22-4bb4-4e6a-802b-940c510138c5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "RECONNECT_AFTER_IMPORT",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": " Data Analyst - Job Application Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1178193299,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit#gid=1178193299"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email Address",
+              "lookupValue": "={{ $json[\"Email Address\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        0
+      ],
+      "id": "9d86ab3b-60eb-46f2-b0a3-dc78db08eae9",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": null,
+          "name": "RECONNECT_AFTER_IMPORT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"candidate_name\": \"Rahul Sharma\",\n  \"overall_score\": 90,\n  \"experience_match\": \"Excellent\",\n  \"skills_match\": \"High\",\n  \"strengths\": [\n    \"Advanced SQL\",\n    \"Python\",\n    \"Power BI\",\n    \"Data Analysis\"\n  ],\n  \"missing_skills\": [\n    \"Cloud platforms\",\n    \"Machine Learning\"\n  ],\n  \"recommendation\": \"Highly Recommended for Interview\",\n  \"reason\": \"The candidate has relevant experience and strong technical skills.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2112,
+        144
+      ],
+      "id": "2a77a469-83f4-4825-8054-ff9b00e9b8d0",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": " Data Analyst - Job Application Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1103205733,
+          "mode": "list",
+          "cachedResultName": "Candidate Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit#gid=1103205733"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Candidate Name": "={{ $json.output.candidate_name }}",
+            "Overall Score": "={{ $json.output.overall_score }}",
+            "Experience Match": "={{ $json.output.experience_match }}",
+            "Skills Match": "={{ $json.output.skills_match }}",
+            "Missing Skills": "={{ $json.output.missing_skills }}",
+            "Recommendation": "={{ $json.output.recommendation }}",
+            "Reason": "={{ $json.output.reason }}",
+            "Strengths": "={{ $json.output.strengths }}",
+            "Shortlisting Status": "Shortlisted",
+            "Email Address": "={{ $('Google Sheets Trigger').item.json[\"Email Address\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Candidate Name",
+              "displayName": "Candidate Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Overall Score",
+              "displayName": "Overall Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Experience Match",
+              "displayName": "Experience Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Skills Match",
+              "displayName": "Skills Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Strengths",
+              "displayName": "Strengths",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Missing Skills",
+              "displayName": "Missing Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Recommendation",
+              "displayName": "Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Shortlisting Status",
+              "displayName": "Shortlisting Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Interview Date",
+              "displayName": "Interview Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Interview Time",
+              "displayName": "Interview Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Meeting  link",
+              "displayName": "Meeting  link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2640,
+        -208
+      ],
+      "id": "9ead3aad-0053-4514-9cde-f655ee526fb4",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": null,
+          "name": "RECONNECT_AFTER_IMPORT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "12a5103f-0460-42c1-b09f-9015985934ed",
+              "leftValue": "={{ $json.duplicate_count }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        896,
+        0
+      ],
+      "id": "817206dd-5a55-4c0b-9595-c68ae07e8775",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Get matching rows from Google Sheets\nconst matches = $input.all();\n\n// 2. Get current candidate from Loop Over Items\nconst candidate = $(\"Loop Over Items\").item.json;\n\n// 3. Normalize current candidate email\nconst email = (candidate[\"Email Address\"] || \"\")\n  .trim()\n  .toLowerCase();\n\n// 4. Count matching email records\nconst duplicateCount = matches.filter(item => {\n  const sheetEmail = (item.json[\"Email Address\"] || \"\")\n    .trim()\n    .toLowerCase();\n\n  return sheetEmail === email;\n}).length;\n\n// 5. Preserve candidate data and add duplicate status\nreturn [{\n  json: {\n    ...candidate,\n    duplicate_count: duplicateCount,\n    is_duplicate: duplicateCount > 1\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "59f52d02-efcd-4e1a-8fa8-ecbf968721c1",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "fromEmail": "YOUR_EMAIL@example.com",
+        "toEmail": "={{ $json[\"Email Address\"] }}",
+        "subject": "Already Registered - Data Analyst Job  Application",
+        "html": "=<h2>Application Already Registered</h2>\n\n<p>Hello {{ $json[\"Candidate Name\"] }},</p>\n\n<p>Our records show that you have already submitted an application for the Data Analyst position.</p>\n\n<p>We appreciate your interest. Please avoid submitting duplicate applications.</p>\n\n<p>Regards,<br>\nHR Recruitment Team</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1088,
+        -160
+      ],
+      "id": "2180335c-aee1-46cf-b4b2-621d1afcbeea",
+      "name": "Send an Email",
+      "credentials": {
+        "smtp": {
+          "id": null,
+          "name": "RECONNECT_AFTER_IMPORT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        224,
+        0
+      ],
+      "id": "f3757240-88f2-44bf-a8ee-b889e642f796",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        448,
+        208
+      ],
+      "id": "99cd5624-ebd7-4b40-8ea6-ff4e5df6083b",
+      "placeholder": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "340e81ae-90bb-4e3c-ba26-b09046fa57be",
+              "leftValue": "={{ $json.output.overall_score }}",
+              "rightValue": 80,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        2320,
+        -64
+      ],
+      "id": "4283fa52-e2d5-452f-80f1-e7ba54a1718d",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "11b19ab8-d529-4d24-ba1d-eb31fa5600b0",
+              "leftValue": "={{ $json.output.overall_score }}",
+              "rightValue": 60,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        2544,
+        32
+      ],
+      "id": "c6a0d910-ddeb-4bf0-a54d-ba1c63b49d12",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": " Data Analyst - Job Application Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1103205733,
+          "mode": "list",
+          "cachedResultName": "Candidate Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit#gid=1103205733"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Candidate Name": "={{ $json.output.candidate_name }}",
+            "Overall Score": "={{ $json.output.overall_score }}",
+            "Experience Match": "={{ $json.output.experience_match }}",
+            "Skills Match": "={{ $json.output.skills_match }}",
+            "Strengths": "={{ $json.output.strengths }}",
+            "Missing Skills": "={{ $json.output.missing_skills }}",
+            "Recommendation": "={{ $json.output.recommendation }}",
+            "Reason": "={{ $json.output.reason }}",
+            "Shortlisting Status": "Manual Review"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Candidate Name",
+              "displayName": "Candidate Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Overall Score",
+              "displayName": "Overall Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Experience Match",
+              "displayName": "Experience Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Skills Match",
+              "displayName": "Skills Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Strengths",
+              "displayName": "Strengths",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Missing Skills",
+              "displayName": "Missing Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Recommendation",
+              "displayName": "Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Shortlisting Status",
+              "displayName": "Shortlisting Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2768,
+        -64
+      ],
+      "id": "80ee5fe3-b603-4046-ab8d-335ba15e8909",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": null,
+          "name": "RECONNECT_AFTER_IMPORT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": " Data Analyst - Job Application Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1103205733,
+          "mode": "list",
+          "cachedResultName": "Candidate Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REPLACE_WITH_YOUR_GOOGLE_SHEET_ID/edit#gid=1103205733"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Candidate Name": "={{ $json.output.candidate_name }}",
+            "Overall Score": "={{ $json.output.overall_score }}",
+            "Experience Match": "={{ $json.output.experience_match }}",
+            "Skills Match": "={{ $json.output.skills_match }}",
+            "Strengths": "={{ $json.output.strengths }}",
+            "Missing Skills": "={{ $json.output.missing_skills }}",
+            "Recommendation": "={{ $json.output.recommendation }}",
+            "Reason": "={{ $json.output.reason }}",
+            "Shortlisting Status": "Not Recommended"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Candidate Name",
+              "displayName": "Candidate Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Overall Score",
+              "displayName": "Overall Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Experience Match",
+              "displayName": "Experience Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Skills Match",
+              "displayName": "Skills Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Strengths",
+              "displayName": "Strengths",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Missing Skills",
+              "displayName": "Missing Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Recommendation",
+              "displayName": "Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Shortlisting Status",
+              "displayName": "Shortlisting Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2768,
+        128
+      ],
+      "id": "9aee3680-fcfe-44d0-bbce-4c54664be4c1",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": null,
+          "name": "RECONNECT_AFTER_IMPORT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "YOUR_EMAIL@example.com",
+        "toEmail": "={{ $('Google Sheets Trigger').item.json[\"Email Address\"] }}",
+        "subject": "Congratulations! You Are Shortlisted for Data Analyst Interview",
+        "html": "=<html>\n<body>\n  <h2>Congratulations,{{ $json[\"Candidate Name\"] }} !</h2>\n\n  <p>We are pleased to inform you that you have been shortlisted for the <b>Data Analyst</b> position.</p>\n\n  <p>Your resume and technical skills have been reviewed, and we would like to invite you for an interview.</p>\n\n  <h3>Interview Details</h3>\n\n  <p><b>Date:</b>{{ $json[\"Interview Date\"] }}</p>\n  <p><b>Time:</b>{{ $json[\"Interview Time\"] }}</p>\n  <p><b>Meeting Link:</b>{{ $json[\"Meeting link\"] }}</p>\n\n  <p>Please confirm your availability by replying to this email.</p>\n\n  <p>Best Regards,<br>\n  HR Team</p>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2864,
+        -208
+      ],
+      "id": "59a7bb7e-c9f0-42b9-a957-ac016259e20c",
+      "name": "Send an Email1",
+      "credentials": {
+        "smtp": {
+          "id": null,
+          "name": "RECONNECT_AFTER_IMPORT"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send an Email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "06fd6505-084a-4dbc-a13c-9141d84e904d",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "TDI4jTwjas80WQM3",
+  "tags": []
+}

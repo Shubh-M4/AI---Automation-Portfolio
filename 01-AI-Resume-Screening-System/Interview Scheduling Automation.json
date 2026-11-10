@@ -1,0 +1,497 @@
+{
+  "name": "Interview Scheduling Automation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2ccc1c94-3c39-435d-8daf-c6e2a06de55b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1fruxGa_SrAZ3r7Q2kmPKH-_AtoQNRQijdtf8x8Z8ohY",
+          "mode": "list",
+          "cachedResultName": " Data Analyst - Job Application Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fruxGa_SrAZ3r7Q2kmPKH-_AtoQNRQijdtf8x8Z8ohY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1103205733,
+          "mode": "list",
+          "cachedResultName": "Candidate Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fruxGa_SrAZ3r7Q2kmPKH-_AtoQNRQijdtf8x8Z8ohY/edit#gid=1103205733"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Shortlisting Status",
+              "lookupValue": "Shortlisted"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "8f666d81-996b-4108-bada-b8fca6eab37e",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FrtPGSuTNsapaDGh",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "e96dd2d7-88f2-45c3-bed5-bf8a188b6842",
+              "leftValue": "={{ $json[\"Interview Date\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a5ea3974-17b5-4305-a3bc-6a8a57d6f5b1",
+              "leftValue": "={{ $json[\"Interview Time\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "993d515e-e3b8-46b9-a133-d06ef772cc36",
+              "leftValue": "={{ $json[\"Shortlisting Status\"] }}",
+              "rightValue": "Shortlisted",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "aa8696dd-0049-4934-9608-7c1115dd7a4b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1fruxGa_SrAZ3r7Q2kmPKH-_AtoQNRQijdtf8x8Z8ohY",
+          "mode": "list",
+          "cachedResultName": " Data Analyst - Job Application Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fruxGa_SrAZ3r7Q2kmPKH-_AtoQNRQijdtf8x8Z8ohY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1103205733,
+          "mode": "list",
+          "cachedResultName": "Candidate Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fruxGa_SrAZ3r7Q2kmPKH-_AtoQNRQijdtf8x8Z8ohY/edit#gid=1103205733"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Get row(s) in sheet1').item.json[\"row_number\"] }}",
+            "Interview Date": "={{ $('Get row(s) in sheet1').item.json[\"Interview Date\"] }}",
+            "Interview Time": "={{ $('Get row(s) in sheet1').item.json[\"Interview Time\"] }}",
+            "Candidate Name": "={{ $('Get row(s) in sheet1').item.json[\"Candidate Name\"] }}",
+            "Overall Score": "={{ $('Get row(s) in sheet1').item.json[\"Overall Score\"] }}",
+            "Experience Match": "={{ $('Get row(s) in sheet1').item.json[\"Experience Match\"] }}",
+            "Skills Match": "={{ $('Get row(s) in sheet1').item.json[\"Skills Match\"] }}",
+            "Strengths": "={{ $('Get row(s) in sheet1').item.json[\"Strengths\"] }}",
+            "Missing Skills": "={{ $('Get row(s) in sheet1').item.json['Missing Skills'] }}",
+            "Recommendation": "={{ $('Get row(s) in sheet1').item.json['Recommendation'] }}",
+            "Reason": "={{ $('Get row(s) in sheet1').item.json['Reason'] }}",
+            "Shortlisting Status": "={{ $('Get row(s) in sheet1').item.json['Shortlisting Status'] }}",
+            "Meeting  link": "={{ $json.hangoutLink }}",
+            "Email Address": "={{ $('Get row(s) in sheet1').item.json['Email Address'] }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Candidate Name",
+              "displayName": "Candidate Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Overall Score",
+              "displayName": "Overall Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Experience Match",
+              "displayName": "Experience Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Skills Match",
+              "displayName": "Skills Match",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Strengths",
+              "displayName": "Strengths",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Missing Skills",
+              "displayName": "Missing Skills",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Recommendation",
+              "displayName": "Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Shortlisting Status",
+              "displayName": "Shortlisting Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Interview Date",
+              "displayName": "Interview Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Interview Time",
+              "displayName": "Interview Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Meeting  link",
+              "displayName": "Meeting  link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        944,
+        -96
+      ],
+      "id": "923b8669-d396-43db-a42f-f4c8e1443794",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FrtPGSuTNsapaDGh",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "kushhijda69@gmail.com",
+          "mode": "list",
+          "cachedResultName": "kushhijda69@gmail.com"
+        },
+        "start": "={{ DateTime.fromFormat($json[\"Interview Date\"] + \" \" + $json[\"Interview Time\"], \"dd/MM/yyyy h:mm a\").toISO() }}",
+        "end": "={{ DateTime.fromFormat($json[\"Interview Date\"] + \" \" + $json[\"Interview Time\"], \"dd/MM/yyyy h:mm a\").plus({ minutes: 30 }).toISO() }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $json[\"Email Address\"] }}"
+          ],
+          "conferenceDataUi": {
+            "conferenceDataValues": {
+              "conferenceSolution": "hangoutsMeet"
+            }
+          },
+          "description": "={{ \"Interview for Data Analyst Position\\nCandidate: \" + $json[\"Candidate Name\"] + \"\\nExperience: \" + $json[\"Experience Match\"] + \"\\nReason: \" + $json[\"Reason\"] }}",
+          "summary": "=Data Analyst Interview - {{ $json[\"Candidate Name\"] }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        768,
+        -96
+      ],
+      "id": "bcf73998-8eb5-4f46-9b96-1bb5ff4ff8c3",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "u2Hi5o208lXs02Mq",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1fruxGa_SrAZ3r7Q2kmPKH-_AtoQNRQijdtf8x8Z8ohY",
+          "mode": "list",
+          "cachedResultName": " Data Analyst - Job Application Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fruxGa_SrAZ3r7Q2kmPKH-_AtoQNRQijdtf8x8Z8ohY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1103205733,
+          "mode": "list",
+          "cachedResultName": "Candidate Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fruxGa_SrAZ3r7Q2kmPKH-_AtoQNRQijdtf8x8Z8ohY/edit#gid=1103205733"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Email Address",
+              "lookupValue": "={{ $json[\"Email Address\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        -96
+      ],
+      "id": "d861b06a-d3d2-4f98-b857-074d3245d626",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FrtPGSuTNsapaDGh",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "kushhijda69@gmail.com",
+        "toEmail": "={{ $json['Email Address'] }}",
+        "subject": "Interview Invitation – Data Analyst Position",
+        "html": "=<h2>Congratulations! Your Interview is Scheduled</h2>\n\n<p>Dear Candidate,</p>\n\n<p>Your interview for the <b>Data Analyst Position</b> has been scheduled.</p>\n\n<p><b>Interview Details:</b></p>\n\n<ul>\n  <li><b>Date:</b> {{ $('Get row(s) in sheet').item.json['Interview Date'] }}</li>\n  <li><b>Time:</b> {{ $('Get row(s) in sheet').item.json['Interview Time'] }}</li>\n  <li><b>Duration:</b> 30 Minutes</li>\n</ul>\n\n<p><b>Google Meet Link:</b></p>\n\n<p><a href=\"{{ $('Create an event').item.json.hangoutLink }}\">Join Interview</a></p>\n\n<p>Please join 5 minutes before the scheduled time.</p>\n\n<p>Best Regards,<br>HR Team<br>Data Analyst Recruitment</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1120,
+        -96
+      ],
+      "id": "ac8af3da-5b5f-4d39-abe2-98467605215a",
+      "name": "Send an Email",
+      "webhookId": "7fd11a35-4eb7-4507-8716-f5f73ef7a952",
+      "credentials": {
+        "smtp": {
+          "id": "3KyxSCvncMIh5dYA",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "4b1b3d9e-b474-4ba5-b450-4dfe93619ed9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0b464fa8e1b265fcf748210e70713fe788189f5660411464689788c175f2dd4a"
+  },
+  "nodeGroups": [],
+  "id": "M4k1IH6alE8twSwR",
+  "tags": []
+}
